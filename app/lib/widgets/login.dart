@@ -1,5 +1,6 @@
 import 'package:app/shared/styles.dart';
 import 'package:flutter/material.dart';
+import "package:universal_html/html.dart" as html;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +19,32 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    bool isSupportedPlatform() {
+      final userAgent = html.window.navigator.userAgent.toLowerCase();
+      if (userAgent.contains('windows') ||
+          userAgent.contains('macintosh') ||
+          userAgent.contains('mac')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    if (!isSupportedPlatform()) {
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            'This app is only supported on Windows and macOS.',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       body: Container(
@@ -55,31 +82,31 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Don\'t Just Achieve Your Goals',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
-                            fontSize: 30,
+                            fontSize: subText,
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Go BEYOND',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
-                            fontSize: 30,
+                            fontSize: subText,
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
+                        SizedBox(height: screenHeight * 0.02),
+                        Text(
                           'Welcome Back! Please login to your account.',
                           style: TextStyle(
                             color: beyondColor,
-                            fontSize: 15,
+                            fontSize: welcomeText,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: screenHeight * 0.02),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: SizedBox(
@@ -94,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: screenHeight * 0.02),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: SizedBox(
@@ -126,54 +153,82 @@ class _LoginPageState extends State<LoginPage> {
                                     child: Text(
                                       'Forgot Password?',
                                       style: TextStyle(
-                                        color: isHovering ? Colors.blue : beyondColor,
-                                        fontWeight: FontWeight.bold
-                                      ),
+                                          fontSize: welcomeText,
+                                          color: isHovering
+                                              ? Colors.blue
+                                              : beyondColor,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(height: screenHeight * 0.02),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        print("Login Button pressed");
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: beyondColor,
-                                        foregroundColor: Colors.white,
-                                        fixedSize: Size(200, 40),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 15,
-                                          horizontal: 40,
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: buttonHeight,
+                                        width: buttonWidth,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            print("Login Button pressed");
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: beyondColor,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 15,
+                                              horizontal: 40,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Login',
+                                            style: TextStyle(
+                                                fontSize: welcomeText,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
-                                      child: const Text("Login"),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        print("Sign Up Button pressed");
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: beyondColor,
-                                        fixedSize: Size(200, 40),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 15,
-                                          horizontal: 40,
-                                        ),
-                                        side: const BorderSide(
-                                          color: beyondColor,
+                                    SizedBox(width: screenWidth * 0.02),
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: buttonHeight,
+                                        width: buttonWidth,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            print("Sign Up Button pressed");
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: beyondColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 15,
+                                              horizontal: 40,
+                                            ),
+                                            side: const BorderSide(
+                                              color: beyondColor,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Sign Up',
+                                            style: TextStyle(
+                                                fontSize: welcomeText,
+                                                color: beyondColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
-                                      child: const Text("Sign Up"),
                                     ),
                                   ],
                                 ),
@@ -185,11 +240,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Image.asset(
-                    'lib/shared/assets/webAppLogo.png',
-                    fit: BoxFit.contain,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Image.asset(
+                            'lib/shared/assets/webAppLogo.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
