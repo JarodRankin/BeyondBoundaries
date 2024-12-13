@@ -10,6 +10,7 @@ const hoverCover = Colors.lightBlue;
 double get subText => 30.sp.clamp(18, 30);
 double get welcomeText => 15.sp.clamp(8, 15);
 double get inputText => 18.sp.clamp(8, 18);
+double get menuText => 20.sp.clamp(18, 20);
 
 double get buttonWidth => 200.w.clamp(90, 200);
 double get buttonHeight => 40.h.clamp(20, 40);

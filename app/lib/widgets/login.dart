@@ -1,6 +1,8 @@
 import 'package:app/shared/styles.dart';
 import 'package:flutter/material.dart';
 import "package:universal_html/html.dart" as html;
+import 'package:app/widgets/menu_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isHovering = false;
 
+  String activeMenuItem = 'Home';
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -22,13 +26,9 @@ class _LoginPageState extends State<LoginPage> {
 
     bool isSupportedPlatform() {
       final userAgent = html.window.navigator.userAgent.toLowerCase();
-      if (userAgent.contains('windows') ||
+      return userAgent.contains('windows') ||
           userAgent.contains('macintosh') ||
-          userAgent.contains('mac')) {
-        return true;
-      } else {
-        return false;
-      }
+          userAgent.contains('mac');
     }
 
     if (!isSupportedPlatform()) {
@@ -45,6 +45,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
+
+    void onMenuTap(String menuItem) {
+    if(menuItem == 'GitHub'){
+      // launch https://github.com/JarodRankin/BeyondBoundaries
+      final Uri uri = Uri.parse('https://github.com/JarodRankin/BeyondBoundaries');
+      launchUrl(uri);
+    } else {
+      setState(() {
+        activeMenuItem = menuItem;
+      });
+    }
+  }
 
     return Scaffold(
       body: Container(
@@ -72,190 +84,219 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Don\'t Just Achieve Your Goals',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                            fontSize: subText,
-                          ),
-                        ),
-                        Text(
-                          'Go BEYOND',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                            fontSize: subText,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Text(
-                          'Welcome Back! Please login to your account.',
-                          style: TextStyle(
-                            color: beyondColor,
-                            fontSize: welcomeText,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: SizedBox(
-                            width: screenWidth / 4,
-                            child: TextField(
-                              controller: usernameController,
-                              decoration: const InputDecoration(
-                                labelText: 'Username',
-                                labelStyle: TextStyle(color: beyondColor),
-                                border: OutlineInputBorder(),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      MenuItem(
+                    menuItem: 'Home',
+                    isActive: activeMenuItem == 'Home',
+                    onTap: onMenuTap,
+                  ),
+                   MenuItem(
+                    menuItem: 'GitHub',
+                    isActive: false,
+                    onTap: onMenuTap,
+                  ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Don\'t Just Achieve Your Goals',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                  fontSize: subText,
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: SizedBox(
-                            width: screenWidth / 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextField(
-                                  controller: passwordController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Password',
-                                    labelStyle: TextStyle(color: beyondColor),
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  obscureText: true,
+                              Text(
+                                'Go BEYOND',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                  fontSize: subText,
                                 ),
-                                const SizedBox(height: 10),
-                                MouseRegion(
-                                  onEnter: (_) => setState(() {
-                                    isHovering = true;
-                                  }),
-                                  onExit: (_) => setState(() {
-                                    isHovering = false;
-                                  }),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      print("Forgot Password tapped");
-                                    },
-                                    child: Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                          fontSize: welcomeText,
-                                          color: isHovering
-                                              ? Colors.blue
-                                              : beyondColor,
-                                          fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: screenHeight * 0.02),
+                              Text(
+                                'Welcome Back! Please login to your account.',
+                                style: TextStyle(
+                                  color: beyondColor,
+                                  fontSize: welcomeText,
+                                ),
+                              ),
+                              SizedBox(height: screenHeight * 0.02),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: SizedBox(
+                                  width: screenWidth / 4,
+                                  child: TextField(
+                                    controller: usernameController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Username',
+                                      labelStyle: TextStyle(color: beyondColor),
+                                      border: OutlineInputBorder(),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: screenHeight * 0.02),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: buttonHeight,
-                                        width: buttonWidth,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            print("Login Button pressed");
+                              ),
+                              SizedBox(height: screenHeight * 0.02),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: SizedBox(
+                                  width: screenWidth / 4,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextField(
+                                        controller: passwordController,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Password',
+                                          labelStyle:
+                                              TextStyle(color: beyondColor),
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        obscureText: true,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      MouseRegion(
+                                        onEnter: (_) => setState(() {
+                                          isHovering = true;
+                                        }),
+                                        onExit: (_) => setState(() {
+                                          isHovering = false;
+                                        }),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            print("Forgot Password tapped");
                                           },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: beyondColor,
-                                            foregroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 15,
-                                              horizontal: 40,
-                                            ),
-                                          ),
                                           child: Text(
-                                            'Login',
+                                            'Forgot Password?',
                                             style: TextStyle(
                                                 fontSize: welcomeText,
-                                                color: Colors.white,
+                                                color: isHovering
+                                                    ? Colors.blue
+                                                    : beyondColor,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: screenWidth * 0.02),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: buttonHeight,
-                                        width: buttonWidth,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            print("Sign Up Button pressed");
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
-                                            foregroundColor: beyondColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 15,
-                                              horizontal: 40,
-                                            ),
-                                            side: const BorderSide(
-                                              color: beyondColor,
+                                      SizedBox(height: screenHeight * 0.02),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: buttonHeight,
+                                              width: buttonWidth,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  print("Login Button pressed");
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: beyondColor,
+                                                  foregroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                    vertical: 15,
+                                                    horizontal: 40,
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  'Login',
+                                                  style: TextStyle(
+                                                      fontSize: welcomeText,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          child: Text(
-                                            'Sign Up',
-                                            style: TextStyle(
-                                                fontSize: welcomeText,
-                                                color: beyondColor,
-                                                fontWeight: FontWeight.bold),
+                                          SizedBox(width: screenWidth * 0.02),
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: buttonHeight,
+                                              width: buttonWidth,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  print("Sign Up Button pressed");
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.white,
+                                                  foregroundColor: beyondColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                    vertical: 15,
+                                                    horizontal: 40,
+                                                  ),
+                                                  side: const BorderSide(
+                                                    color: beyondColor,
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  'Sign Up',
+                                                  style: TextStyle(
+                                                      fontSize: welcomeText,
+                                                      color: beyondColor,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Image.asset(
-                            'lib/shared/assets/webAppLogo.png',
-                            fit: BoxFit.contain,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Image.asset(
+                                  'lib/shared/assets/webAppLogo.png',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(2560, 1305), // Set this to your design's dimensions
+      designSize: const Size(2560, 1305),
       builder: (context, child) {
         return MaterialApp(
           title: 'Beyond Boundaries',
